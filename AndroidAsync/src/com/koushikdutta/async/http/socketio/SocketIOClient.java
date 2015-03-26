@@ -42,6 +42,17 @@ public class SocketIOClient extends EventEmitter {
         }
     }
 
+    public void emit(String name, JSONObject args, Acknowledge acknowledge) {
+        final JSONObject event = new JSONObject();
+        try {
+            event.put("name", name);
+            event.put("args", args);
+            emitRaw(5, event.toString(), acknowledge);
+        }
+        catch (Exception e) {
+        }
+    }
+
     public void emit(final String message, Acknowledge acknowledge) {
         emitRaw(3, message, acknowledge);
     }
