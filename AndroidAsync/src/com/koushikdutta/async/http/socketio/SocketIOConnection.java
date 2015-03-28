@@ -176,8 +176,12 @@ class SocketIOConnection {
             public void run() {
                 if (heartbeat <= 0 || ts != transport || ts == null || !ts.isConnected())
                     return;
-                transport.send("2:::");
-                transport.getServer().postDelayed(this, heartbeat);
+                try {
+                    transport.send("2:::");
+                    transport.getServer().postDelayed(this, heartbeat);
+                } catch (Error e) {
+                    // No more heartbeat, the server died...
+                }
             }
         };
         heartbeatRunner.run();
