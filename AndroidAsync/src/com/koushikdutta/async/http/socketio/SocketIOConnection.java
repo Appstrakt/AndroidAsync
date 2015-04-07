@@ -2,11 +2,9 @@ package com.koushikdutta.async.http.socketio;
 
 import android.net.Uri;
 import android.text.TextUtils;
-
 import com.koushikdutta.async.callback.CompletedCallback;
 import com.koushikdutta.async.future.Cancellable;
 import com.koushikdutta.async.future.DependentCancellable;
-import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.async.future.SimpleFuture;
 import com.koushikdutta.async.future.TransformFuture;
@@ -15,14 +13,12 @@ import com.koushikdutta.async.http.WebSocket;
 import com.koushikdutta.async.http.socketio.transport.SocketIOTransport;
 import com.koushikdutta.async.http.socketio.transport.WebSocketTransport;
 import com.koushikdutta.async.http.socketio.transport.XHRPollingTransport;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by koush on 7/1/13.
@@ -178,8 +174,10 @@ class SocketIOConnection {
                     return;
                 try {
                     transport.send("2:::");
-                    transport.getServer().postDelayed(this, heartbeat);
-                } catch (Error e) {
+                    if(transport.getServer() != null) {
+                        transport.getServer().postDelayed(this, heartbeat);
+                    }
+                } catch (Exception e) {
                     // No more heartbeat, the server died...
                 }
             }
